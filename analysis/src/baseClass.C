@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
+#include <algorithm>
 
 baseClass::~baseClass(){}
 baseClass::baseClass( const std::string & fileList, 
@@ -21,7 +21,7 @@ baseClass::baseClass( const std::string & fileList,
 }
 
 void baseClass::loadBadChannelList(){
-  std::ifstream infile(m_badChannelList);
+  std::ifstream infile(m_badChannelList.c_str());
   std::string line;
   while (std::getline(infile, line)) {
     std::istringstream iss(line);
@@ -41,9 +41,9 @@ void baseClass::loadBadChannelList(){
 
 bool baseClass::isBadChannel(int subdet, int ieta, int iphi, int depth){
   cell hcal_cell (subdet, ieta, iphi, depth);
-  bool is_bad = std::find(m_badChannels.begin(), 
-			  m_badChannels.end()  ,
-			  hcal_cell )!=m_badChannels.end();
+  bool is_bad = (std::find(m_badChannels.begin(), m_badChannels.end(), hcal_cell) != m_badChannels.end());
+			  
+			  
   return is_bad;
 }
 
