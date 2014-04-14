@@ -1,11 +1,11 @@
 COMP=g++
-FLAGS = -O3
+FLAGS = 
 ROOTINC= -I`root-config --incdir`
 ROOTLIBS=  `root-config --glibs --cflags | sed 's/-pthread//g'` -lMinuit 
 INC= -I./include 
 LIBS= ${ROOTLIBS} 
 SRC= ./src
-OBJECTS=$(SRC)/analysisClass.o $(SRC)/baseClass.o 
+OBJECTS=$(SRC)/analysisClass.o $(SRC)/baseClass.o $(SRC)/Cell.o
 TREES=$(SRC)/HcalNoiseTree.o 
 
 default: main
