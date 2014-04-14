@@ -4,39 +4,70 @@
 #include "TH1F.h"
 #include "TChain.h"
 
+#include <fstream>
+#include <sstream>
 #include <iostream>
 #include <assert.h>  
 #include <cmath>
+#include <map>
+
+int getNRings(){
+  return 6;
+}
+
+int getRing(int ieta){
+  int absIeta = abs(ieta);
+  if ( 0  <= absIeta && absIeta <= 16 ) return 0;
+  if ( 17 <= absIeta && absIeta <= 21 ) return 1;
+  if ( 21 <= absIeta && absIeta <= 23 ) return 2;
+  if ( 24 <= absIeta && absIeta <= 25 ) return 3;
+  if ( 26 <= absIeta && absIeta <= 27 ) return 4;
+  if ( 28 <= absIeta && absIeta <= 28 ) return 5;
+  return -1;
+}
 
 void analysisClass::loop(){
 
   //--------------------------------------------------------------------------------
-  // Declare HCAL trees
+  // Declare HCAL tree(s)
   //--------------------------------------------------------------------------------
 
   HcalNoiseTree * noise_tree = getTree<HcalNoiseTree>("noise");
-
-  //--------------------------------------------------------------------------------
-  // How many events to cycle over? 
-  // Is there a more elegant way to do this?
-  //--------------------------------------------------------------------------------
-
   int n_events = noise_tree -> fChain -> GetEntries();
+
+  //--------------------------------------------------------------------------------
+  // Clean branches we don't need
+  //--------------------------------------------------------------------------------
+
+  noise_tree -> fChain -> SetBranchStatus("*"         , kFALSE);
+  noise_tree -> fChain -> SetBranchStatus("PulseCount", kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("IEta"      , kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("IPhi"      , kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("Depth"     , kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("Energy"    , kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("Charge"    , kTRUE );
+  noise_tree -> fChain -> SetBranchStatus("OfficialDecision", kTRUE);
+  noise_tree -> fChain -> SetBranchStatus("NumberOfGoodPrimaryVertices", kTRUE);
 
   //--------------------------------------------------------------------------------
   // Declare some important quantities
   //--------------------------------------------------------------------------------
   
-  const int max_npv        =  50;
-  const int n_trig_towers  =  64;
-  const int max_trig_tower =  32;
-  const int min_trig_tower = -32;
-  const int abs_min_trig_tower = std::abs(min_trig_tower);
+  const int nrings = 6;
 
   //--------------------------------------------------------------------------------
   // Declare histograms
   //--------------------------------------------------------------------------------
+  
+  char hist_name[100];
+  std::vector<TH2F*> a1_histograms, a2_histograms, a3_histograms;
 
+  for (int iring = 0; iring < nrings; ++iring){
+    sprintf(hist_name, "a1_ring%d", iring); a1_histograms.push_back(makeTH2F(hist_name, 100, 0, 1500, 100, 0.0, 2.0));
+    sprintf(hist_name, "a2_ring%d", iring); a2_histograms.push_back(makeTH2F(hist_name, 100, 0, 1500, 100, 0.0, 2.0));
+    sprintf(hist_name, "a3_ring%d", iring); a3_histograms.push_back(makeTH2F(hist_name, 100, 0, 1500, 100, 0.0, 2.0));
+  }
+  
   //--------------------------------------------------------------------------------
   // Loop over the events
   //--------------------------------------------------------------------------------
@@ -47,7 +78,7 @@ void analysisClass::loop(){
     // Tell the user where we are
     //--------------------------------------------------------------------------------
 
-    if (iEvent%100 == 0) std::cout << "Processing event " << iEvent << "/" << n_events << std::endl;
+    if (iEvent%1000 == 0) std::cout << "Processing event " << iEvent << "/" << n_events << std::endl;
     
     //--------------------------------------------------------------------------------
     // Get each entry in the event
@@ -56,10 +87,56 @@ void analysisClass::loop(){
     noise_tree -> GetEntry(iEvent);
 
     //--------------------------------------------------------------------------------
-    // Fill sumETs vs NPV
+    // Event-level selection
+    // Note: "official selection" variable is always zero for MC?
     //--------------------------------------------------------------------------------
 
-    int npv = noise_tree -> NumberOfGoodPrimaryVertices;
+    // if ( noise_tree -> OfficialDecision ) continue;
+    if ( noise_tree -> NumberOfGoodPrimaryVertices == 0 ) continue;
 
+    //--------------------------------------------------------------------------------
+    // Loop over the cells
+    //--------------------------------------------------------------------------------
+    
+    int nHBHE = noise_tree -> PulseCount;
+
+    for (int iHBHE = 0; iHBHE < nHBHE; ++iHBHE){
+
+      //--------------------------------------------------------------------------------
+      // Store some important values
+      //--------------------------------------------------------------------------------
+
+      int     ieta   = noise_tree -> IEta  [iHBHE];
+      int     iphi   = noise_tree -> IPhi  [iHBHE];
+      int    depth   = noise_tree -> Depth [iHBHE];
+      bool     bad   = isBadChannel(0, ieta, iphi, depth);
+      int     ring   = getRing(ieta);
+
+      //--------------------------------------------------------------------------------
+      // Cell-level selection
+      //--------------------------------------------------------------------------------
+      
+      if (noise_tree -> Energy[iHBHE]    < 1.0) continue;
+      if (noise_tree -> Charge[iHBHE][4] < 5.0) continue;
+      if (bad) continue;
+      
+      //--------------------------------------------------------------------------------
+      // Fill histograms
+      //--------------------------------------------------------------------------------
+
+      double TS4 = noise_tree -> Charge[iHBHE][4];
+      double TS5 = noise_tree -> Charge[iHBHE][5];
+      double TS6 = noise_tree -> Charge[iHBHE][6];
+      double TS7 = noise_tree -> Charge[iHBHE][7];
+
+      double a1 = TS5/TS4;
+      double a2 = TS6/TS4;
+      double a3 = TS7/TS4;
+
+      a1_histograms[ring] -> Fill(TS4, a1);
+      a2_histograms[ring] -> Fill(TS4, a2);
+      a3_histograms[ring] -> Fill(TS4, a3);
+
+    }      
   }
 }
