@@ -18,7 +18,7 @@ int getNRings(){
 int getRing(int ieta){
   int absIeta = abs(ieta);
   if ( 0  <= absIeta && absIeta <= 16 ) return 0;
-  if ( 17 <= absIeta && absIeta <= 21 ) return 1;
+  if ( 17 <= absIeta && absIeta <= 20 ) return 1;
   if ( 21 <= absIeta && absIeta <= 23 ) return 2;
   if ( 24 <= absIeta && absIeta <= 25 ) return 3;
   if ( 26 <= absIeta && absIeta <= 27 ) return 4;
@@ -111,11 +111,12 @@ void analysisClass::loop(){
       int    depth   = noise_tree -> Depth [iHBHE];
       bool     bad   = isBadChannel(0, ieta, iphi, depth);
       int     ring   = getRing(ieta);
-
+      
       //--------------------------------------------------------------------------------
       // Cell-level selection
       //--------------------------------------------------------------------------------
       
+      if (ring < 0) continue;
       if (noise_tree -> Energy[iHBHE]    < 1.0) continue;
       if (noise_tree -> Charge[iHBHE][4] < 5.0) continue;
       if (bad) continue;
@@ -136,7 +137,6 @@ void analysisClass::loop(){
       a1_histograms[ring] -> Fill(TS4, a1);
       a2_histograms[ring] -> Fill(TS4, a2);
       a3_histograms[ring] -> Fill(TS4, a3);
-
     }      
   }
 }
