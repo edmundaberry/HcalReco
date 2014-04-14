@@ -1,3 +1,6 @@
 main
+launch.sh
+combine.sh
 doc
 *~
+.*
