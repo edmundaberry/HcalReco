@@ -2,10 +2,12 @@
 #define baseClass_h
 
 #include <map>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <cstdlib>
 
+#include "Cell.h"
 #include "TChain.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -13,12 +15,14 @@
 #include "TH2F.h"
 #include "TH1.h"
 
+
 class baseClass {
   
  public:
   ~baseClass();
   baseClass( const std::string & inputList, const std::string & treeList, const std::string & out_file );
   void run();
+  bool isBadChannel (int subdet, int ieta, int iphi, int depth);
 
   TH1F* makeTH1F(const char * name, int nbins , float xmin, float xmax);
   TH2F* makeTH2F(const char * name, int nbinsx, float xmin, float xmax, int nbinsy, float ymin, float ymax);
@@ -40,6 +44,7 @@ class baseClass {
  private:
   
   TChain* getChain(std::string tree_name);
+  void loadBadChannelList();
   void loadFileList();
   void loadTreeList();
   void loadOutFile ();
@@ -47,6 +52,7 @@ class baseClass {
   void print();
   virtual void loop() = 0;
   
+  const std::string m_badChannelList;
   const std::string m_fileList;
   const std::string m_treeList;
   const std::string m_outFileName;
@@ -59,9 +65,8 @@ class baseClass {
   TFile * m_outFile;
   
   std::map<std::string, std::string> m_treeMap;
-
+  std::vector<cell> m_badChannels;
 };
-
 
 #endif
 

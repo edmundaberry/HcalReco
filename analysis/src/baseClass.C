@@ -11,11 +11,40 @@ baseClass::baseClass( const std::string & fileList,
 		      const std::string & outFileName ):
   m_fileList     ( fileList ),
   m_treeList     ( treeList ),
-  m_outFileName  ( outFileName )
+  m_outFileName  ( outFileName ),
+  m_badChannelList("data/bad_channel_list/bad_channels.txt")
 {
   loadFileList();
   loadTreeList();
+  loadBadChannelList();
   loadOutFile ();
+}
+
+void baseClass::loadBadChannelList(){
+  std::ifstream infile(m_badChannelList);
+  std::string line;
+  while (std::getline(infile, line)) {
+    std::istringstream iss(line);
+    std::string subdet_string;
+    int ieta, iphi, depth;
+    if (!(iss >> ieta >> iphi >> depth >> subdet_string)) break;
+    int subdet = -1;
+    if      (subdet_string.compare("HB") == 0) subdet = 1;
+    else if (subdet_string.compare("HE") == 0) subdet = 2;
+    else if (subdet_string.compare("HO") == 0) subdet = 3;
+    else if (subdet_string.compare("HF") == 0) subdet = 4;
+    else subdet = -1;
+    subdet = 0;
+    m_badChannels.push_back(cell(subdet, ieta, iphi, depth));
+  }
+}
+
+bool baseClass::isBadChannel(int subdet, int ieta, int iphi, int depth){
+  cell hcal_cell (subdet, ieta, iphi, depth);
+  bool is_bad = std::find(m_badChannels.begin(), 
+			  m_badChannels.end()  ,
+			  hcal_cell )!=m_badChannels.end();
+  return is_bad;
 }
 
 void baseClass::loadFileList(){
