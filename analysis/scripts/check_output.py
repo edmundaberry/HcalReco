@@ -163,6 +163,9 @@ workdir_lxbatch_src = args.workdir + "/batch_src"
 workdir_log         = args.workdir + "/log"
 launch_file = open("launch.sh","w")
 
+if bad_jobs and at_fnal:
+    launch_file.write("cd " + log_file_folder + "\n")
+
 for job_number in bad_jobs:
     cfg_file_path = workdir_lxbatch_cfg + "/config_" + str ( job_number ) + ".cfg"
     src_file_path = workdir_lxbatch_src + "/submit_" + str ( job_number ) + ".sh"
@@ -210,6 +213,9 @@ for job_number in bad_jobs:
         launch_command = "condor_submit " + cfg_file_path
         launch_file.write(launch_command+"\n")
 
+if bad_jobs and at_fnal:
+    launch_file.write("cd -\n")
+
 launch_file.close()
 
 
@@ -222,13 +228,13 @@ if bad_jobs:
     print "\t", "source launch.sh"
 else:
     print "Done!  All jobs successful!"
-    if write_to_eos and len (eos_files) > 1:
-        combine_file_name = "combine.sh"
-        hadd_file = open (combine_file_name,"w")
-        hadd_file.write("hadd " + args.output_file + ".root ")
-        for eos_file in eos_files[:-1]:
-            hadd_file.write(args.eos_directory + "/" + eos_file + " ")
-        hadd_file.write(args.eos_directory + "/" + eos_files[-1] + "\n")
-        hadd_file.close()
-        print "Combine by doing the following:"
-        print "\t", "source " + combine_file_name
+if write_to_eos and len (eos_files) > 1:
+    combine_file_name = "combine.sh"
+    hadd_file = open (combine_file_name,"w")
+    hadd_file.write("hadd " + args.output_file + ".root ")
+    for eos_file in eos_files[:-1]:
+        hadd_file.write(args.eos_directory + "/" + eos_file + " ")
+    hadd_file.write(args.eos_directory + "/" + eos_files[-1] + "\n")
+    hadd_file.close()
+    print "Combine finished jobs by doing the following:"
+    print "\t", "source " + combine_file_name
