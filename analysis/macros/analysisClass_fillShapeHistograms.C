@@ -32,7 +32,7 @@ void analysisClass::loop(){
   // Declare HCAL tree(s)
   //--------------------------------------------------------------------------------
 
-  HcalNoiseTree * noise_tree = getTree<HcalNoiseTree>("noise");
+  HcalNoiseTree * noise_tree = getTree<HcalNoiseTree>("noise_tree");
   int n_events = noise_tree -> fChain -> GetEntries();
 
   //--------------------------------------------------------------------------------

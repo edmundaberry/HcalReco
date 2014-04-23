@@ -20,8 +20,12 @@ args = parser.parse_args()
 # Are we at FNAL or CERN?
 #----------------------------------------------------------------------------
 
-at_fnal = ("fnal.gov" in os.environ["HOSTNAME"])
-at_cern = ("cern.ch"  in os.environ["HOSTNAME"])
+at_cern = False
+at_fnal = False
+
+if "HOSTNAME" in os.environ:
+    at_fnal = ("fnal.gov" in os.environ["HOSTNAME"])
+    at_cern = ("cern.ch"  in os.environ["HOSTNAME"] or "lxplus" in os.environ["HOSTNAME"])
 
 #----------------------------------------------------------------------------
 # Is there an EOS folder in our directories?

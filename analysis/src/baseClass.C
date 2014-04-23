@@ -42,8 +42,6 @@ void baseClass::loadBadChannelList(){
 bool baseClass::isBadChannel(int subdet, int ieta, int iphi, int depth){
   cell hcal_cell (subdet, ieta, iphi, depth);
   bool is_bad = (std::find(m_badChannels.begin(), m_badChannels.end(), hcal_cell) != m_badChannels.end());
-			  
-			  
   return is_bad;
 }
 
@@ -53,8 +51,24 @@ void baseClass::loadFileList(){
   while (std::getline(infile, line)) {
     std::istringstream iss(line);
     std::string file_name;
-    if (!(iss >> file_name)) break;
-    m_file_names.push_back(file_name);
+    std::string file_label;
+    if (!(iss >> file_label >> file_name )){
+      std::istringstream iss(line);
+      file_label = std::string("no_label");
+      if (!(iss >> file_name)) break;
+      m_fileMap[file_label].push_back(file_name);
+    }
+    else {
+      std::ifstream sub_file(file_name.c_str());
+      std::string sub_line;
+      while (std::getline(sub_file, sub_line)) {
+	std::string sub_file_name;
+	std::istringstream sub_iss(sub_line);
+	if (!(sub_iss >> sub_file_name)) break;
+	m_fileMap[file_label].push_back(sub_file_name);
+      }
+    }
+    
   }
 }
 
@@ -82,10 +96,11 @@ void baseClass::loadOutFile(){
   m_outFile = new TFile (m_outFileName.c_str(), "RECREATE");
 }
 
-TChain* baseClass::getChain(std::string tree_name){
+TChain* baseClass::getChain(std::string tree_name, std::string file_label ){
   TChain * chain = new TChain(tree_name.c_str());
-  std::vector<std::string>::iterator i_file_name   = m_file_names.begin();
-  std::vector<std::string>::iterator end_file_name = m_file_names.end();
+  std::vector<std::string> file_names = m_fileMap[file_label];
+  std::vector<std::string>::iterator i_file_name   = file_names.begin();
+  std::vector<std::string>::iterator end_file_name = file_names.end();
   for (; i_file_name != end_file_name; ++i_file_name){
     chain -> Add (i_file_name->c_str());
   }
@@ -114,18 +129,27 @@ void baseClass::write(){
 
 void baseClass::print(){
   std::cout << "-----------------------------------------------------------------------------" << std::endl;
-  std::cout << "Analyzing these files (" << m_fileList << "):" << std::endl;
-  std::vector<std::string>::iterator i_file   = m_file_names.begin();
-  std::vector<std::string>::iterator end_file = m_file_names.end();
-  for (; i_file != end_file; ++i_file)
-    std::cout << "\t" << *i_file << std::endl;
 
+  std::cout << "Analyzing these files (" << m_fileList << "):" << std::endl;
+  std::map<std::string,std::vector<std::string> >::iterator i_file_label   = m_fileMap.begin();
+  std::map<std::string,std::vector<std::string> >::iterator end_file_label = m_fileMap.end();
+  for (; i_file_label != end_file_label; ++i_file_label){
+    std::cout << "\t" << i_file_label -> first << std::endl;
+    std::vector<std::string>::iterator i_file   = i_file_label -> second.begin();
+    std::vector<std::string>::iterator end_file = i_file_label -> second.end();
+    for (; i_file != end_file; ++i_file){
+      std::cout << "\t\t" << *i_file << std::endl;
+    }
+  }
+  std::cout << std::endl;
   std::cout << "Using these trees (" << m_treeList << "):" << std::endl;
   std::map<std::string,std::string>::iterator i_tree   = m_treeMap.begin();
   std::map<std::string,std::string>::iterator end_tree = m_treeMap.end();
-  for (; i_tree != end_tree; ++i_tree)
-    std::cout << "\t" << i_tree -> second << "\t(" << i_tree -> first << ")" << std::endl;
-  
+  for (; i_tree != end_tree; ++i_tree){
+    std::cout << "\t" << i_tree -> first << std::endl;
+    std::cout << "\t\t" << i_tree -> second << std::endl;
+  }
+  std::cout << std::endl;
   std::cout << "Writing output here:" << std::endl;
   std::cout << "\t" << m_outFileName << std::endl;
   std::cout << "-----------------------------------------------------------------------------" << std::endl;

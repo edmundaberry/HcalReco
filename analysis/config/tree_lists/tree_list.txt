@@ -1,1 +1,1 @@
-noise ExportTree/HcalNoiseTree
+noise_tree ExportTree/HcalNoiseTree
