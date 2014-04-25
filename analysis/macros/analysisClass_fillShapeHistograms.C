@@ -4,6 +4,7 @@
 #include "TH1F.h"
 #include "TChain.h"
 
+#include <iomanip> 
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -64,21 +65,21 @@ void analysisClass::loop(){
   char hist_name[100];
   std::vector<TH2F*> a0_histograms, a1_histograms, a2_histograms, a3_histograms;
   for (int iring = 0; iring < nrings; ++iring){
-    sprintf(hist_name, "a0_ring%d", iring); a0_histograms.push_back(makeTH2F(hist_name, 1500, 0, 1500, 1000, 0.0, 2.0));
-    sprintf(hist_name, "a1_ring%d", iring); a1_histograms.push_back(makeTH2F(hist_name, 1500, 0, 1500, 1000, 0.0, 2.0));
-    sprintf(hist_name, "a2_ring%d", iring); a2_histograms.push_back(makeTH2F(hist_name, 1500, 0, 1500, 1000, 0.0, 2.0));
-    sprintf(hist_name, "a3_ring%d", iring); a3_histograms.push_back(makeTH2F(hist_name, 1500, 0, 1500, 1000, 0.0, 2.0));
+    sprintf(hist_name, "a0_ring%d", iring); a0_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, 0.0, 2.0));
+    sprintf(hist_name, "a1_ring%d", iring); a1_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, 0.0, 2.0));
+    sprintf(hist_name, "a2_ring%d", iring); a2_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, 0.0, 2.0));
+    sprintf(hist_name, "a3_ring%d", iring); a3_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, 0.0, 2.0));
   }
 
-  TH2F* a0_histogram_hb = makeTH2F("a0_hb", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a1_histogram_hb = makeTH2F("a1_hb", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a2_histogram_hb = makeTH2F("a2_hb", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a3_histogram_hb = makeTH2F("a3_hb", 1500, 0, 1500, 1000, 0.0, 2.0);
+  TH2F* a0_histogram_hb = makeTH2F("a0_hb", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a1_histogram_hb = makeTH2F("a1_hb", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a2_histogram_hb = makeTH2F("a2_hb", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a3_histogram_hb = makeTH2F("a3_hb", 3000, 0, 3000, 100, 0.0, 2.0);
 
-  TH2F* a0_histogram_he = makeTH2F("a0_he", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a1_histogram_he = makeTH2F("a1_he", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a2_histogram_he = makeTH2F("a2_he", 1500, 0, 1500, 1000, 0.0, 2.0);
-  TH2F* a3_histogram_he = makeTH2F("a3_he", 1500, 0, 1500, 1000, 0.0, 2.0);
+  TH2F* a0_histogram_he = makeTH2F("a0_he", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a1_histogram_he = makeTH2F("a1_he", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a2_histogram_he = makeTH2F("a2_he", 3000, 0, 3000, 100, 0.0, 2.0);
+  TH2F* a3_histogram_he = makeTH2F("a3_he", 3000, 0, 3000, 100, 0.0, 2.0);
   
   //--------------------------------------------------------------------------------
   // Loop over the events
@@ -147,6 +148,18 @@ void analysisClass::loop(){
       double TS6 = noise_tree -> Charge[iHBHE][6];
       double TS7 = noise_tree -> Charge[iHBHE][7];
 
+      /*
+      std::cout << "-------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+      for (int i = 0; i < 10; i++){
+	std::cout << i << "\t";
+      }
+      std::cout << std::endl;
+      for (int i = 0; i < 10; i++){
+	std::cout << std::setprecision(2) <<  noise_tree -> Charge[iHBHE][i] << "\t";
+      }
+      std::cout << std::endl;
+      */
+      
       double a0  = TS3/TS4;
       double a1  = TS5/TS4;
       double a2  = TS6/TS4;
