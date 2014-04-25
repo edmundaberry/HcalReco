@@ -23,12 +23,17 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(3)
+    input = cms.untracked.int32(
+        #PROCESSEVENTS
+    )
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
     secondaryFileNames = cms.untracked.vstring(),
+    skipEvents = cms.untracked.uint32(
+        #SKIPEVENTS
+    ),                           
     fileNames = cms.untracked.vstring(
         #FILENAMES
     )
