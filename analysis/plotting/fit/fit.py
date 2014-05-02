@@ -5,6 +5,30 @@
 import ROOT as r
 
 #------------------------------------------------------------------------------------
+# Read data values
+#------------------------------------------------------------------------------------
+
+def read_data_values ( data_card_path ):
+    d_function_ring_region_parameters = {}
+    data_card = open ( data_card_path )
+    for line in data_card:
+        if line.strip() == "": continue
+        fields = line.split()
+        function   = int(fields[0])
+        ring       = int(fields[1])
+        region     = str(fields[2])
+        parameters = fields[3:]
+        
+        if function not in d_function_ring_region_parameters.keys():
+            d_function_ring_region_parameters[function] = {}
+        if ring not in d_function_ring_region_parameters[function].keys():
+            d_function_ring_region_parameters[function][ring] = {}
+        d_function_ring_region_parameters[function][ring][region] = parameters
+
+    return d_function_ring_region_parameters
+    
+
+#------------------------------------------------------------------------------------
 # Define polynomials
 #------------------------------------------------------------------------------------
 
@@ -140,19 +164,43 @@ def main():
     # Set important variables for the user to tinker with
     #------------------------------------------------------------------------------------
     
-    min_function = 1;
-    max_function = 1;
-    min_ring     = 0;
-    max_ring     = 5;
-    rebinx       = 5;
-    rebiny       = 1;
-    fit_xmin     = 0.;
-    fit_xmax     = 1500.;
-    plot_xmin    = 0.;
-    plot_xmax    = 1500.;
-    draw_pieces  = False;
-    file_name    = "HcalNoise_QCD1800_MC.root";
+    min_function   = 1;
+    max_function   = 3;
+    min_ring       = 0;
+    max_ring       = 1;
+    rebinx         = 5;
+    rebiny         = 1;
+    fit_xmin       = 0.;
+    fit_xmax       = 1350.;
+    plot_xmin      = 0.;
+    plot_xmax      = 1350.;
+    draw_pieces    = True;
+    tex_preamble   = False;
+    file_name      = "HcalNoise_QCD1800_MC.root";
+    data_card_path = "data/data_cards/data_card_2014-04-17.txt";
+    
+    d_ring_name = {
+        0: "HB",
+        1: "HE, 17:20",
+        2: "HE, 21:23",
+        3: "HE, 24:25",
+        4: "HE, 26:27",
+        5: "HE, 28:28"
+        }
+    
+    d_function_name = {
+        0: "TS3/TS4",
+        1: "TS5/TS4",
+        2: "TS6/TS4",
+        3: "TS7/TS4"
+        }
 
+    #------------------------------------------------------------------------------------ 
+    # Get data values
+    #------------------------------------------------------------------------------------ 
+
+    d_function_ring_region_parameters = read_data_values ( data_card_path ) 
+ 
     #------------------------------------------------------------------------------------ 
     # Open the file 
     #------------------------------------------------------------------------------------ 
@@ -172,12 +220,15 @@ def main():
           [23., 68., 190., 515., 1150.], [23., 68., 190., 970. , 1300.], [19., 68., 190., 905. , 1450.] ]
         ]
     
+    a123_values = [
+        
+        ]
+    
     #------------------------------------------------------------------------------------ 
     # Style the canvas
     #------------------------------------------------------------------------------------ 
     
     canv = r.TCanvas();
-    canv.SetLogx();
     r.gStyle.SetOptFit(0);
     r.gStyle.SetOptStat(0);
     
@@ -195,6 +246,9 @@ def main():
 
         if function > 0:
             
+            if function == 3 and ring == 1:
+                fit_xmax = 1350.
+                plot_xmax = 1350.
             func = r.TF1("func", fitf, fit_xmin, fit_xmax, 22);
     
             func.SetParName(0 , "Limit1");
@@ -224,6 +278,8 @@ def main():
             
             func.SetParName(20, "a11_1");
             
+            func.SetParName(21, "a21_1");
+            
         else:
             func = r.TF1 ("func", fitf0, fit_xmin, fit_xmax, 4)
             func.SetParameter(0,0.02756);
@@ -248,8 +304,9 @@ def main():
             #------------------------------------------------------------------------------------ 
       
             hist_name = "a%d" % function + "_ring%d"     % ring
-            save_name = "a%d" % function + "_ring%d.png" % ring
-
+            save_name = "png/a%d" % function + "_ring%d.png" % ring
+            tex_name  = "tex/a%d" % function + "_ring%d.tex" % ring
+            
             #------------------------------------------------------------------------------------ 
             # Get the 2D histogram and rebin it if necessary
             #------------------------------------------------------------------------------------ 
@@ -273,6 +330,8 @@ def main():
             prof.SetMarkerColor(r.kBlue);
             prof.Draw("P");
             prof.GetXaxis().SetRangeUser(plot_xmin, plot_xmax);
+            prof.GetXaxis().SetTitle("TS4 [fC], for " + d_ring_name[ring]);
+            prof.GetYaxis().SetTitle(d_function_name[function]);
             
             #------------------------------------------------------------------------------------ 
             # Set the break points of the fit function for a1, a2, a3 (depends on the ring)
@@ -291,67 +350,98 @@ def main():
                 func.SetParLimits(2, 3, 2);
                 func.SetParLimits(3, 3, 2);
                 func.SetParLimits(4, 3, 2);
-                
+
+                max_bin   = prof.GetMaximumBin()
+                max_value = prof.GetBinContent(max_bin)
+
+                if function == 3 and ring == 1:
+                    func.SetParameter(5,0.321598327812)
+                    func.SetParLimits(5,0.321444800797, 0.321751854827)
+                    func.SetParameter(6,-0.0276337689358)
+                    func.SetParLimits(6,-0.02764171405, -0.0276258238215)
+                    func.SetParameter(7,0.000447197867143)
+                    func.SetParLimits(7,0.000446795874674, 0.000447599859613)
+                    func.SetParameter(8,4.81154319861e-05)
+                    func.SetParLimits(8,4.80952185904e-05, 4.81356453819e-05)
+                    func.SetParameter(9,-1.62800362277e-06)
+                    func.SetParLimits(9,-1.62901765716e-06, -1.62698958837e-06)
+                    func.SetParameter(10,-0.00252541689719)
+                    func.SetParLimits(10,-0.00252925933634, -0.00252157445804)
+                    func.SetParameter(11,2.5149592949e-05)
+                    func.SetParLimits(11,2.51053396697e-05, 2.51938462283e-05)
+                    func.SetParameter(12,1.69544994168e-07)
+                    func.SetParLimits(12,1.68929320068e-07, 1.70160668268e-07)
+                    func.SetParameter(13,-2.89409892983e-09)
+                    func.SetParLimits(13,-2.90304377416e-09, -2.88515408551e-09)
+                    
             #------------------------------------------------------------------------------------ 
             # Fit the profile
             #------------------------------------------------------------------------------------ 
             
-            prof.Fit("func","MR");
+            prof.Fit("func","R");
             
             #------------------------------------------------------------------------------------ 
             # Make the piece-wise fit functions for a1, a2, a3 and draw them (if requested)
             #------------------------------------------------------------------------------------ 
             
             if function > 0:
+
+                for i in range(5, 22):
+                    value = func.GetParameter(i)
+                    error = func.GetParError (i)
+                    if value == 0.0: continue
+                    print "func.SetParameter(" + str(i) + ","  + str ( value ) + ")"
+                    print "func.SetParLimits(" + str(i) + "," + str ( value - 2.0 * error ) + ", " + str(value+ 2.0 * error) + ")"
+                    
                 
                 func1 = r.TF1("func1", "pol4", fit_xmin, func.GetParameter(0));
-                func1.SetParameter(0, func.GetParameter(5));
-                func1.SetParameter(1, func.GetParameter(6));
-                func1.SetParameter(2, func.GetParameter(7));
-                func1.SetParameter(3, func.GetParameter(8));
-                func1.SetParameter(4, func.GetParameter(9));
-                
+                func1.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["0"][0]));
+                func1.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["0"][1]));
+                func1.SetParameter(2, float(d_function_ring_region_parameters[function][ring]["0"][2]));
+                func1.SetParameter(3, float(d_function_ring_region_parameters[function][ring]["0"][3]));
+                func1.SetParameter(4, float(d_function_ring_region_parameters[function][ring]["0"][4]));
+
                 func2 = r.TF1("func2", "pol4", func.GetParameter(0), func.GetParameter(1));
-                func2.SetParameter(0, getOffset1(func));
-                func2.SetParameter(1, func.GetParameter(10));
-                func2.SetParameter(2, func.GetParameter(11));
-                func2.SetParameter(3, func.GetParameter(12));
-                func2.SetParameter(4, func.GetParameter(13));
+                func2.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["1"][0]));
+                func2.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["1"][1]));
+                func2.SetParameter(2, float(d_function_ring_region_parameters[function][ring]["1"][2]));
+                func2.SetParameter(3, float(d_function_ring_region_parameters[function][ring]["1"][3]));
+                func2.SetParameter(4, float(d_function_ring_region_parameters[function][ring]["1"][4]));
                 
                 func3 = r.TF1("func3", "pol3", func.GetParameter(1), func.GetParameter(2));
-                func3.SetParameter(0, getOffset2(func));
-                func3.SetParameter(1, func.GetParameter(14));
-                func3.SetParameter(2, func.GetParameter(15));
-                func3.SetParameter(3, func.GetParameter(16));
+                func3.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["2"][0]));
+                func3.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["2"][1]));
+                func3.SetParameter(2, float(d_function_ring_region_parameters[function][ring]["2"][2]));
+                func3.SetParameter(3, float(d_function_ring_region_parameters[function][ring]["2"][3]));
                 
                 func4 = r.TF1("func4", "pol3", func.GetParameter(2), func.GetParameter(3));
-                func4.SetParameter(0, getOffset3(func));
-                func4.SetParameter(1, func.GetParameter(17));
-                func4.SetParameter(2, func.GetParameter(18));
-                func4.SetParameter(3, func.GetParameter(19));
+                func4.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["3"][0]));
+                func4.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["3"][1]));
+                func4.SetParameter(2, float(d_function_ring_region_parameters[function][ring]["3"][2]));
+                func4.SetParameter(3, float(d_function_ring_region_parameters[function][ring]["3"][3]));
                 
                 func5 = r.TF1("func5", "pol1", func.GetParameter(3), func.GetParameter(4));
-                func5.SetParameter(0, getOffset4(func));
-                func5.SetParameter(1, func.GetParameter(20));
+                func5.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["4"][0]));
+                func5.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["4"][1]));
                 
                 func6 = r.TF1("func6", "pol1", func.GetParameter(4), fit_xmax);
-                func6.SetParameter(0, getOffset5(func));
-                func6.SetParameter(1, func.GetParameter(21));
+                func6.SetParameter(0, float(d_function_ring_region_parameters[function][ring]["5"][0]));
+                func6.SetParameter(1, float(d_function_ring_region_parameters[function][ring]["5"][1]));
             
                 if draw_pieces:
-                    func1.SetLineColor(kRed   );
-                    func2.SetLineColor(kYellow);
-                    func3.SetLineColor(kCyan  );
-                    func4.SetLineColor(kGreen );
-                    func5.SetLineColor(kPink  );
-                    func6.SetLineColor(kYellow);
+                    func1.SetLineColor(r.kBlack);
+                    func2.SetLineColor(r.kBlack);
+                    func3.SetLineColor(r.kBlack);
+                    func4.SetLineColor(r.kBlack);
+                    func5.SetLineColor(r.kBlack);
+                    func6.SetLineColor(r.kBlack);
                     
-                    func1.SetLineStyle(kDashed);
-                    func2.SetLineStyle(kDashed);
-                    func3.SetLineStyle(kDashed);
-                    func4.SetLineStyle(kDashed);
-                    func5.SetLineStyle(kDashed);
-                    func6.SetLineStyle(kDashed);
+                    func1.SetLineStyle(r.kDashed);
+                    func2.SetLineStyle(r.kDashed);
+                    func3.SetLineStyle(r.kDashed);
+                    func4.SetLineStyle(r.kDashed);
+                    func5.SetLineStyle(r.kDashed);
+                    func6.SetLineStyle(r.kDashed);
                     
                     func1.Draw("SAME");
                     func2.Draw("SAME");
@@ -363,8 +453,9 @@ def main():
             #------------------------------------------------------------------------------------ 
             # Save the canvas
             #------------------------------------------------------------------------------------ 
-          
+            
             canv.SaveAs(save_name);
 
 if __name__ == "__main__":
     main()
+    
