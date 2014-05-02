@@ -60,12 +60,13 @@ class baseClass {
   void write();
   void print();
   virtual void loop() = 0;
+
+ protected:
   
   const std::string m_badChannelList;
   const std::string m_fileList;
   const std::string m_treeList;
   const std::string m_outFileName;
-
   
   std::vector<TH1*> m_objects;
   
