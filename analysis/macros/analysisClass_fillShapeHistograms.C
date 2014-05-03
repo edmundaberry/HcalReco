@@ -65,10 +65,10 @@ void analysisClass::loop(){
   char hist_name[100];
   std::vector<TH2F*> a0_histograms, a1_histograms, a2_histograms, a3_histograms;
   for (int iring = 0; iring < nrings; ++iring){
-    sprintf(hist_name, "a0_ring%d", iring); a0_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, -10.0, 10.0));
-    sprintf(hist_name, "a1_ring%d", iring); a1_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, -10.0, 10.0));
-    sprintf(hist_name, "a2_ring%d", iring); a2_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, -10.0, 10.0));
-    sprintf(hist_name, "a3_ring%d", iring); a3_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 100, -10.0, 10.0));
+    sprintf(hist_name, "a0_ring%d", iring); a0_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 10000, -10.0, 10.0));
+    sprintf(hist_name, "a1_ring%d", iring); a1_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 10000, -10.0, 10.0));
+    sprintf(hist_name, "a2_ring%d", iring); a2_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 10000, -10.0, 10.0));
+    sprintf(hist_name, "a3_ring%d", iring); a3_histograms.push_back(makeTH2F(hist_name, 3000, 0, 3000, 10000, -10.0, 10.0));
   }
 
   TH2F* a0_histogram_hb = makeTH2F("a0_hb", 3000, 0, 3000, 100, -10.0, 10.0);
