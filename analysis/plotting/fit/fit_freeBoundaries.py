@@ -8,7 +8,7 @@ import array, copy
 def getProfile ( hist, min_combined_bin_content ):
 
     nbinsx = hist.GetXaxis().GetNbins()
-    nbinsy = hist.GetXaxis().GetNbins()
+    nbinsy = hist.GetYaxis().GetNbins()
 
     combined_bins = []
     combined_integral = 0.0
@@ -19,10 +19,12 @@ def getProfile ( hist, min_combined_bin_content ):
         integral  = hist.Integral(bin, bin, 1, nbinsy)
         low_edge  = hist.GetXaxis().GetBinLowEdge(bin)
         high_edge = hist.GetXaxis().GetBinUpEdge (bin)
-    
         combined_integral += integral
-    
+
+        print low_edge, high_edge, integral, combined_integral
+        
         if combined_integral > min_combined_bin_content or bin < 10: 
+            print "\t", "new bin"
             combined_bins.append ( low_edge )
             combined_integral = 0.
 
@@ -191,6 +193,14 @@ def fitf0_v3(x,par):
         retval = offset + par[5] * ( xx - par[6]);
         return retval;
 
+
+def fitf0_v4(x,par):
+    xx     = x[0];
+    a      = par[0]
+    b      = par[1]
+    retval = a * ( 1.0 - r.TMath.Exp(-1.0 * xx * b ) )
+    return retval
+
 def fitf0(x,par):
     xx = x[0]
     pol1_offset = par[0];
@@ -327,6 +337,18 @@ def make_function_expo (func_name, xmin, xmax ):
     
 
     return func
+
+
+def make_function_expo_alexandre (func_name, xmin, xmax ):
+    
+    func = r.TF1 (func_name, fitf0_v4, xmin, xmax, 2)
+    func.SetLineColor(r.kRed);
+
+    func.SetParameter(1, 2.16435e-04)
+    func.SetParameter(0, 1.0)
+
+    return func
+    
     
 #------------------------------------------------------------------------------------ 
 # Perform the fit
@@ -339,16 +361,17 @@ def main():
     #------------------------------------------------------------------------------------
     
     min_function   = 0;
-    max_function   = 3;
+    max_function   = 0;
     min_ring       = 0;
-    max_ring       = 5;
+    max_ring       = 0;
     # fit_xmin       = 5.;
     # fit_xmax       = 3000.;
 
     fit_xmin       = 5.;
     fit_xmax       = 3000.;
 
-    fit_xmax_a0    = 200.;
+    fit_xmin_a0    = 100.;
+    fit_xmax_a0    = 3000.;
     plot_xmin      = 5.;
     plot_xmax      = 3000.;
     draw_pieces    = False;
@@ -460,6 +483,8 @@ def main():
             out_file.cd()
             prof.Write()
 
+            continue
+
             #------------------------------------------------------------------------------------ 
             # Get some values from the TProfile
             #------------------------------------------------------------------------------------ 
@@ -474,7 +499,7 @@ def main():
             if function > 0:
                 func = make_function_poly (func_name, fit_xmin, fit_xmax, function, ring, min_val)
             else:
-                func = make_function_expo (func_name, fit_xmin, fit_xmax_a0)
+                func = make_function_expo_alexandre (func_name, fit_xmin_a0, fit_xmax_a0)
 
             #------------------------------------------------------------------------------------ 
             # Style the TProfile
