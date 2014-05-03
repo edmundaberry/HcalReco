@@ -21,10 +21,7 @@ def getProfile ( hist, min_combined_bin_content ):
         high_edge = hist.GetXaxis().GetBinUpEdge (bin)
         combined_integral += integral
 
-        print low_edge, high_edge, integral, combined_integral
-        
         if combined_integral > min_combined_bin_content or bin < 10: 
-            print "\t", "new bin"
             combined_bins.append ( low_edge )
             combined_integral = 0.
 
