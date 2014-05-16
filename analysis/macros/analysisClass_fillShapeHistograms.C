@@ -61,6 +61,9 @@ void analysisClass::loop(){
   //--------------------------------------------------------------------------------
 
   TH1F * h_npv = makeTH1F("npv",5,-0.5,4.5);
+  TH1F * h_ieta= makeTH1F("ieta", 59, -29.5, 29.5 );
+  TH1F * h_iphi= makeTH1F("iphi", 73, -0.5, 72.5 );
+  TH2F * h_ieta_iphi = makeTH2F("ieta_iphi", 59, -29.5, 29.5, 73, -0.5, 72.5 );
   
   char hist_name[100];
   std::vector<TH2F*> a0_histograms, a1_histograms, a2_histograms, a3_histograms;
@@ -169,7 +172,10 @@ void analysisClass::loop(){
       // Fill histograms
       //--------------------------------------------------------------------------------
 
-      
+      h_ieta      -> Fill ( ieta );
+      h_iphi      -> Fill ( iphi );
+      h_ieta_iphi -> Fill ( ieta, iphi );
+
       a0_histograms[ring] -> Fill(TS4, a0);
       a1_histograms[ring] -> Fill(TS4, a1);
       a2_histograms[ring] -> Fill(TS4, a2);
