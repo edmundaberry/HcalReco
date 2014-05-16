@@ -301,14 +301,16 @@ void analysisClass::loop(){
     // Assert that we're on the same event
     //--------------------------------------------------------------------------------
 
-    assert(no_pu_tree -> RunNumber   == pu_50_tree -> RunNumber  );
-    assert(no_pu_tree -> EventNumber == pu_50_tree -> EventNumber);
-    assert(no_pu_tree -> LumiSection == pu_50_tree -> LumiSection);
-
     if (no_pu_tree -> EventNumber != pu_50_tree -> EventNumber){
+      std::cout << "PU 50 run number   = " << pu_50_tree -> RunNumber << std::endl;
+      std::cout << "No PU run number   = " << no_pu_tree -> RunNumber << std::endl; 
       std::cout << "PU 50 event number = " << pu_50_tree -> EventNumber << std::endl;
       std::cout << "No PU event number = " << no_pu_tree -> EventNumber << std::endl;
     }
+
+    assert(no_pu_tree -> RunNumber   == pu_50_tree -> RunNumber  );
+    assert(no_pu_tree -> EventNumber == pu_50_tree -> EventNumber);
+    assert(no_pu_tree -> LumiSection == pu_50_tree -> LumiSection);
 
     //--------------------------------------------------------------------------------
     // Loop over digis
