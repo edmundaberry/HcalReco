@@ -281,6 +281,7 @@ void analysisClass::loop(){
   // Loop over the events
   //--------------------------------------------------------------------------------
   
+  // for (int iEvent = 2864; iEvent < 2865; ++iEvent){
   for (int iEvent = 0; iEvent < n_events; ++iEvent){
 
     //--------------------------------------------------------------------------------
@@ -304,6 +305,11 @@ void analysisClass::loop(){
     assert(no_pu_tree -> EventNumber == pu_50_tree -> EventNumber);
     assert(no_pu_tree -> LumiSection == pu_50_tree -> LumiSection);
 
+    if (no_pu_tree -> EventNumber != pu_50_tree -> EventNumber){
+      std::cout << "PU 50 event number = " << pu_50_tree -> EventNumber << std::endl;
+      std::cout << "No PU event number = " << no_pu_tree -> EventNumber << std::endl;
+    }
+
     //--------------------------------------------------------------------------------
     // Loop over digis
     //--------------------------------------------------------------------------------
@@ -312,6 +318,8 @@ void analysisClass::loop(){
     int no_pu_nHBHE = no_pu_tree -> PulseCount;
 
     for(int pu_50_iHBHE = 0; pu_50_iHBHE < pu_50_nHBHE; ++pu_50_iHBHE){
+      // for(int pu_50_iHBHE = 10; pu_50_iHBHE < 11; ++pu_50_iHBHE){
+      
       int pu_50_ieta  = pu_50_tree -> IEta [pu_50_iHBHE];
       int pu_50_iphi  = pu_50_tree -> IPhi [pu_50_iHBHE];
       int pu_50_depth = pu_50_tree -> Depth[pu_50_iHBHE];
@@ -330,13 +338,14 @@ void analysisClass::loop(){
 
       float pu_50_TS45 = pu_50_TS4 + pu_50_TS5;
 
-      float pu_50_TS3_prime  = pu_50_TS3        - (v_a0[pu_50_ring] -> Eval(pu_50_TS4) * pu_50_TS4);
-      float pu_50_TS3_prime2 = pu_50_TS3_prime  - (v_a1[pu_50_ring] -> Eval(pu_50_TS2) * pu_50_TS2);
+      float pu_50_TS3_prime  = TMath::Max(0.,pu_50_TS3        - (v_a0[pu_50_ring] -> Eval(pu_50_TS4)        * pu_50_TS4));
+      float pu_50_TS3_prime2 = TMath::Max(0.,pu_50_TS3_prime  - (v_a1[pu_50_ring] -> Eval(pu_50_TS2)        * pu_50_TS2));
       float pu_50_TS4_prime  = pu_50_TS4        - (v_a1[pu_50_ring] -> Eval(pu_50_TS3_prime2) * pu_50_TS3_prime2) - (v_a2[pu_50_ring] -> Eval(pu_50_TS2) * pu_50_TS2);
       float pu_50_TS5_prime  = pu_50_TS5        - (v_a2[pu_50_ring] -> Eval(pu_50_TS3_prime2) * pu_50_TS3_prime2) - (v_a3[pu_50_ring] -> Eval(pu_50_TS2) * pu_50_TS2);
       float pu_50_TS45_prime = pu_50_TS4_prime  + pu_50_TS5_prime;
 
       for(int no_pu_iHBHE = 0; no_pu_iHBHE < no_pu_nHBHE; ++no_pu_iHBHE){
+      // for(int no_pu_iHBHE = 6; no_pu_iHBHE < 7; ++no_pu_iHBHE){
 	
 	int no_pu_ieta  = no_pu_tree -> IEta [no_pu_iHBHE];
 	int no_pu_iphi  = no_pu_tree -> IPhi [no_pu_iHBHE];
@@ -363,16 +372,16 @@ void analysisClass::loop(){
 
 	float no_pu_TS45 = no_pu_TS4 + no_pu_TS5;
 	
-	float delta0 = (pu_50_TS0 - no_pu_TS0) / no_pu_TS4;
-	float delta1 = (pu_50_TS1 - no_pu_TS1) / no_pu_TS4;
-	float delta2 = (pu_50_TS2 - no_pu_TS2) / no_pu_TS4;
-	float delta3 = (pu_50_TS3 - no_pu_TS3) / no_pu_TS4;
+	float delta0 = (pu_50_TS0 - no_pu_TS0) / no_pu_TS0;
+	float delta1 = (pu_50_TS1 - no_pu_TS1) / no_pu_TS1;
+	float delta2 = (pu_50_TS2 - no_pu_TS2) / no_pu_TS2;
+	float delta3 = (pu_50_TS3 - no_pu_TS3) / no_pu_TS3;
 	float delta4 = (pu_50_TS4 - no_pu_TS4) / no_pu_TS4;
-	float delta5 = (pu_50_TS5 - no_pu_TS5) / no_pu_TS4;
-	float delta6 = (pu_50_TS6 - no_pu_TS6) / no_pu_TS4;
-	float delta7 = (pu_50_TS7 - no_pu_TS7) / no_pu_TS4;
-	float delta8 = (pu_50_TS8 - no_pu_TS8) / no_pu_TS4;
-	float delta9 = (pu_50_TS9 - no_pu_TS9) / no_pu_TS4;
+	float delta5 = (pu_50_TS5 - no_pu_TS5) / no_pu_TS5;
+	float delta6 = (pu_50_TS6 - no_pu_TS6) / no_pu_TS6;
+	float delta7 = (pu_50_TS7 - no_pu_TS7) / no_pu_TS7;
+	float delta8 = (pu_50_TS8 - no_pu_TS8) / no_pu_TS8;
+	float delta9 = (pu_50_TS9 - no_pu_TS9) / no_pu_TS9;
 
 	float cross_check_a0 = (no_pu_TS3 - (v_a0[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4)) / no_pu_TS3;
 	float cross_check_a1 = (no_pu_TS5 - (v_a1[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4)) / no_pu_TS5;
@@ -382,6 +391,23 @@ void analysisClass::loop(){
 	float delta_uncorrected = (pu_50_TS45       - no_pu_TS45) / no_pu_TS45;
 	float delta_corrected   = (pu_50_TS45_prime - no_pu_TS45) / no_pu_TS45;
 	float correction        = (pu_50_TS45_prime - pu_50_TS45);
+	
+	/*
+	std::cout << "no pu" << "\t" << "pu 50" << std::endl;
+	for (int i = 0; i < 10; ++i){
+	  std::cout << i << "\t" << no_pu_tree -> Charge[no_pu_iHBHE][i] << "\t" << pu_50_tree -> Charge[pu_50_iHBHE][i] << std::endl;
+	}
+	
+	std::cout << "3'\t"  << pu_50_TS3_prime  << std::endl;
+	std::cout << "3''\t" << pu_50_TS3_prime2 << std::endl;
+	std::cout << "4'\t"  << pu_50_TS4_prime  << std::endl;
+	std::cout << "5'\t"  << pu_50_TS5_prime  << std::endl;
+	std::cout << "45'\t" << pu_50_TS45_prime << std::endl;
+	std::cout << "45 \t" << pu_50_TS45       << std::endl;
+
+	std::cout << "Predicted time slew from TS4 into TS3     (take from TS3):\t" << v_a0[pu_50_ring] -> Eval(pu_50_TS4) * pu_50_TS4 << "\t" << "Argument = TS4 = " << pu_50_TS4 << std::endl;
+	std::cout << "Predicted contamination from TS2 into TS3 (take from TS3):\t" << v_a1[pu_50_ring] -> Eval(pu_50_TS2) * pu_50_TS2 << "\t" << "Argument = TS2 = " << pu_50_TS2 << std::endl;
+	*/
 	
 	h_correction        -> Fill(correction);
 	h_delta_corrected   -> Fill(delta_corrected);
@@ -424,8 +450,8 @@ void analysisClass::loop(){
 	h_TS4_vs_cross_check_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
 
 
-	h_TS4_vs_delta_uncorrected[no_pu_ring] -> Fill(no_pu_TS4, delta_uncorrected);
-	h_TS4_vs_delta_corrected  [no_pu_ring] -> Fill(no_pu_TS4, delta_corrected  );
+	h_TS4_vs_delta_uncorrected[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
+	h_TS4_vs_delta_corrected  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
 
 	if ( no_pu_TS4 > 50 ){
 	  h_TS4_vs_cross_check_over50_a0[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a0);
@@ -433,8 +459,8 @@ void analysisClass::loop(){
 	  h_TS4_vs_cross_check_over50_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a2);
 	  h_TS4_vs_cross_check_over50_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
 	  
-	  h_TS4_vs_delta_uncorrected_over50[no_pu_ring] -> Fill(no_pu_TS4, delta_uncorrected);
-	  h_TS4_vs_delta_corrected_over50  [no_pu_ring] -> Fill(no_pu_TS4, delta_corrected  );
+	  h_TS4_vs_delta_uncorrected_over50[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
+	  h_TS4_vs_delta_corrected_over50  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
 	}
 
 	if ( no_pu_TS4 > 500 ){
@@ -443,8 +469,8 @@ void analysisClass::loop(){
 	  h_TS4_vs_cross_check_over500_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a2);
 	  h_TS4_vs_cross_check_over500_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
 
-	  h_TS4_vs_delta_uncorrected_over500[no_pu_ring] -> Fill(no_pu_TS4, delta_uncorrected);
-	  h_TS4_vs_delta_corrected_over500  [no_pu_ring] -> Fill(no_pu_TS4, delta_corrected  );
+	  h_TS4_vs_delta_uncorrected_over500[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
+	  h_TS4_vs_delta_corrected_over500  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
 	}
 
 	if (isHB){
