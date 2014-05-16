@@ -12,7 +12,7 @@ import argparse
 #----------------------------------------------------------------------------
 
 parser = argparse.ArgumentParser(description='Make an input list')
-parser.add_argument('-i', metavar='INPUT' , dest='input_folders',action="append", required=True, help='List of EOS or dCache folders to be used as input')
+parser.add_argument('-i', metavar='INPUT' , dest='input_folders',action="store", required=True,nargs='*', help='(List of EOS or dCache folders (separated by spaces) to be used as input')
 parser.add_argument('-o', metavar="OUTPUT", dest='output_folder',action="store" , required=True, help='Output folder where input list will be stored')
 args = parser.parse_args()
 
