@@ -31,35 +31,35 @@ void analysisClass::loop(){
   // Declare functions
   //--------------------------------------------------------------------------------
   
-  TF1 * f_a0_HB     = new TF1( "a0_HB"    , fitResults::a0_HB    , 0 , 10000, 0);
-  TF1 * f_a1_HB     = new TF1( "a1_HB"    , fitResults::a1_HB    , 0 , 10000, 0);
-  TF1 * f_a2_HB     = new TF1( "a1_HB"    , fitResults::a2_HB    , 0 , 10000, 0);
-  TF1 * f_a3_HB     = new TF1( "a1_HB"    , fitResults::a3_HB    , 0 , 10000, 0);
+  TF1 * f_a0_HB     = new TF1( "a0_HB"    , fitResults::a0_HB  , 0 , 10000, 0);
+  TF1 * f_a1_HB     = new TF1( "a1_HB"    , fitResults::a1_HB  , 0 , 10000, 0);
+  TF1 * f_a2_HB     = new TF1( "a1_HB"    , fitResults::a2_HB  , 0 , 10000, 0);
+  TF1 * f_a3_HB     = new TF1( "a1_HB"    , fitResults::a3_HB  , 0 , 10000, 0);
   
-  TF1 * f_a0_HE1720 = new TF1( "a0_HE1720", fitResults::a0_HE1720, 0 , 10000, 0);
-  TF1 * f_a1_HE1720 = new TF1( "a1_HE1720", fitResults::a1_HE1720, 0 , 10000, 0);
-  TF1 * f_a2_HE1720 = new TF1( "a2_HE1720", fitResults::a2_HE1720, 0 , 10000, 0);
-  TF1 * f_a3_HE1720 = new TF1( "a3_HE1720", fitResults::a3_HE1720, 0 , 10000, 0);
-  
-  TF1 * f_a0_HE2123 = new TF1( "a0_HE2123", fitResults::a0_HE2123, 0 , 10000, 0);
-  TF1 * f_a1_HE2123 = new TF1( "a1_HE2123", fitResults::a1_HE2123, 0 , 10000, 0);
-  TF1 * f_a2_HE2123 = new TF1( "a2_HE2123", fitResults::a2_HE2123, 0 , 10000, 0);
-  TF1 * f_a3_HE2123 = new TF1( "a3_HE2123", fitResults::a3_HE2123, 0 , 10000, 0);
+  TF1 * f_a0_HE1720 = new TF1( "a0_HE1720", fitResults::a0_1720, 0 , 10000, 0);
+  TF1 * f_a1_HE1720 = new TF1( "a1_HE1720", fitResults::a1_1720, 0 , 10000, 0);
+  TF1 * f_a2_HE1720 = new TF1( "a2_HE1720", fitResults::a2_1720, 0 , 10000, 0);
+  TF1 * f_a3_HE1720 = new TF1( "a3_HE1720", fitResults::a3_1720, 0 , 10000, 0);
 
-  TF1 * f_a0_HE2425 = new TF1( "a0_HE2425", fitResults::a0_HE2425, 0 , 10000, 0);
-  TF1 * f_a1_HE2425 = new TF1( "a1_HE2425", fitResults::a1_HE2425, 0 , 10000, 0);
-  TF1 * f_a2_HE2425 = new TF1( "a2_HE2425", fitResults::a2_HE2425, 0 , 10000, 0);
-  TF1 * f_a3_HE2425 = new TF1( "a3_HE2425", fitResults::a3_HE2425, 0 , 10000, 0);
-  
-  TF1 * f_a0_HE2627 = new TF1( "a0_HE2627", fitResults::a0_HE2627, 0 , 10000, 0);
-  TF1 * f_a1_HE2627 = new TF1( "a1_HE2627", fitResults::a1_HE2627, 0 , 10000, 0);
-  TF1 * f_a2_HE2627 = new TF1( "a2_HE2627", fitResults::a2_HE2627, 0 , 10000, 0);
-  TF1 * f_a3_HE2627 = new TF1( "a3_HE2627", fitResults::a3_HE2627, 0 , 10000, 0);
-  
-  TF1 * f_a0_HE2828 = new TF1( "a0_HE2828", fitResults::a0_HE2828, 0 , 10000, 0);
-  TF1 * f_a1_HE2828 = new TF1( "a1_HE2828", fitResults::a1_HE2828, 0 , 10000, 0);
-  TF1 * f_a2_HE2828 = new TF1( "a2_HE2828", fitResults::a2_HE2828, 0 , 10000, 0);
-  TF1 * f_a3_HE2828 = new TF1( "a3_HE2828", fitResults::a3_HE2828, 0 , 10000, 0);
+  TF1 * f_a0_HE2123 = new TF1( "a0_HE2123", fitResults::a0_2123, 0 , 10000, 0);
+  TF1 * f_a1_HE2123 = new TF1( "a1_HE2123", fitResults::a1_2123, 0 , 10000, 0);
+  TF1 * f_a2_HE2123 = new TF1( "a2_HE2123", fitResults::a2_2123, 0 , 10000, 0);
+  TF1 * f_a3_HE2123 = new TF1( "a3_HE2123", fitResults::a3_2123, 0 , 10000, 0);
+
+  TF1 * f_a0_HE2425 = new TF1( "a0_HE2425", fitResults::a0_2425, 0 , 10000, 0);
+  TF1 * f_a1_HE2425 = new TF1( "a1_HE2425", fitResults::a1_2425, 0 , 10000, 0);
+  TF1 * f_a2_HE2425 = new TF1( "a2_HE2425", fitResults::a2_2425, 0 , 10000, 0);
+  TF1 * f_a3_HE2425 = new TF1( "a3_HE2425", fitResults::a3_2425, 0 , 10000, 0);
+
+  TF1 * f_a0_HE2627 = new TF1( "a0_HE2627", fitResults::a0_2627, 0 , 10000, 0);
+  TF1 * f_a1_HE2627 = new TF1( "a1_HE2627", fitResults::a1_2627, 0 , 10000, 0);
+  TF1 * f_a2_HE2627 = new TF1( "a2_HE2627", fitResults::a2_2627, 0 , 10000, 0);
+  TF1 * f_a3_HE2627 = new TF1( "a3_HE2627", fitResults::a3_2627, 0 , 10000, 0);
+
+  TF1 * f_a0_HE2828 = new TF1( "a0_HE2828", fitResults::a0_28  , 0 , 10000, 0);
+  TF1 * f_a1_HE2828 = new TF1( "a1_HE2828", fitResults::a1_28  , 0 , 10000, 0);
+  TF1 * f_a2_HE2828 = new TF1( "a2_HE2828", fitResults::a2_28  , 0 , 10000, 0);
+  TF1 * f_a3_HE2828 = new TF1( "a3_HE2828", fitResults::a3_28  , 0 , 10000, 0);
 
   std::vector<TF1*> v_a0, v_a1, v_a2, v_a3;
   
@@ -281,8 +281,8 @@ void analysisClass::loop(){
   // Loop over the events
   //--------------------------------------------------------------------------------
   
-  // for (int iEvent = 2864; iEvent < 2865; ++iEvent){
-  for (int iEvent = 0; iEvent < n_events; ++iEvent){
+  for (int iEvent = 0; iEvent < 2300; ++iEvent){
+  // for (int iEvent = 0; iEvent < n_events; ++iEvent){
 
     //--------------------------------------------------------------------------------
     // Tell the user where we are
