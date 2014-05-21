@@ -191,6 +191,15 @@ void analysisClass::loop(){
   std::vector<TH2F*> h_TS4_vs_delta_uncorrected_over500;
   std::vector<TH2F*> h_TS4_vs_delta_corrected_over500;
 
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_uncorrected;
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_corrected;
+
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_uncorrected_over50;
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_corrected_over50;
+
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_uncorrected_over500;
+  std::vector<TH2F*> h_TS4_vs_delta_nonrel_corrected_over500;
+
   std::vector<TH2F*> h_TS4_vs_cross_check_a0;
   std::vector<TH2F*> h_TS4_vs_cross_check_a1;
   std::vector<TH2F*> h_TS4_vs_cross_check_a2;
@@ -205,6 +214,21 @@ void analysisClass::loop(){
   std::vector<TH2F*> h_TS4_vs_cross_check_over500_a1;
   std::vector<TH2F*> h_TS4_vs_cross_check_over500_a2;
   std::vector<TH2F*> h_TS4_vs_cross_check_over500_a3;
+
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_a0;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_a1;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_a2;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_a3;
+
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over50_a0;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over50_a1;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over50_a2;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over50_a3;
+
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over500_a0;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over500_a1;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over500_a2;
+  std::vector<TH2F*> h_TS4_vs_cross_check_nonrel_over500_a3;
 
   std::vector<TH2F*> h_TS4_vs_delta0;
   std::vector<TH2F*> h_TS4_vs_delta1;
@@ -266,6 +290,21 @@ void analysisClass::loop(){
     sprintf(hist_name, "TS4_vs_crosscheck_over500_a1_ring%d"    , iring); h_TS4_vs_cross_check_over500_a1    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
     sprintf(hist_name, "TS4_vs_crosscheck_over500_a2_ring%d"    , iring); h_TS4_vs_cross_check_over500_a2    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
     sprintf(hist_name, "TS4_vs_crosscheck_over500_a3_ring%d"    , iring); h_TS4_vs_cross_check_over500_a3    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
+    					
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a0_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a0            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a1_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a1            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a2_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a2            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a3_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a3            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
+							        					     
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a0_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a0     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a1_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a1     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a2_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a2     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a3_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a3     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
+							        					     
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a0_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a0    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a1_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a1    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a2_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a2    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a3_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a3    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
     							        					     
     sprintf(hist_name, "TS4_vs_delta_uncorrected_ring%d"        , iring); h_TS4_vs_delta_uncorrected         .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -10, 10));
     sprintf(hist_name, "TS4_vs_delta_corrected_ring%d"          , iring); h_TS4_vs_delta_corrected           .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -10, 10));
@@ -275,14 +314,23 @@ void analysisClass::loop(){
 
     sprintf(hist_name, "TS4_vs_delta_uncorrected_over500_ring%d", iring); h_TS4_vs_delta_uncorrected_over500 .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -1, 1));
     sprintf(hist_name, "TS4_vs_delta_corrected_over500_ring%d"  , iring); h_TS4_vs_delta_corrected_over500   .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -1, 1));
+
+		        					     
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_ring%d"        , iring); h_TS4_vs_delta_nonrel_uncorrected         .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_ring%d"          , iring); h_TS4_vs_delta_nonrel_corrected           .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -100, 100));
+
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over50_ring%d" , iring); h_TS4_vs_delta_nonrel_uncorrected_over50  .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over50_ring%d"   , iring); h_TS4_vs_delta_nonrel_corrected_over50    .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 200, -100, 100));
+
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over500_ring%d", iring); h_TS4_vs_delta_nonrel_uncorrected_over500 .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over500_ring%d"  , iring); h_TS4_vs_delta_nonrel_corrected_over500   .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -100, 100));
   }
 
   //--------------------------------------------------------------------------------
   // Loop over the events
   //--------------------------------------------------------------------------------
   
-  for (int iEvent = 0; iEvent < 2300; ++iEvent){
-  // for (int iEvent = 0; iEvent < n_events; ++iEvent){
+  for (int iEvent = 0; iEvent < n_events; ++iEvent){
 
     //--------------------------------------------------------------------------------
     // Tell the user where we are
@@ -302,6 +350,7 @@ void analysisClass::loop(){
     //--------------------------------------------------------------------------------
 
     if (no_pu_tree -> EventNumber != pu_50_tree -> EventNumber){
+      std::cout << "iEvent = " << iEvent << std::endl;
       std::cout << "PU 50 run number   = " << pu_50_tree -> RunNumber << std::endl;
       std::cout << "No PU run number   = " << no_pu_tree -> RunNumber << std::endl; 
       std::cout << "PU 50 event number = " << pu_50_tree -> EventNumber << std::endl;
@@ -390,9 +439,16 @@ void analysisClass::loop(){
 	float cross_check_a2 = (no_pu_TS6 - (v_a2[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4)) / no_pu_TS6;
 	float cross_check_a3 = (no_pu_TS7 - (v_a3[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4)) / no_pu_TS7;
 
-	float delta_uncorrected = (pu_50_TS45       - no_pu_TS45) / no_pu_TS45;
-	float delta_corrected   = (pu_50_TS45_prime - no_pu_TS45) / no_pu_TS45;
-	float correction        = (pu_50_TS45_prime - pu_50_TS45);
+	float cross_check_nonrel_a0 = (no_pu_TS3 - (v_a0[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4));
+	float cross_check_nonrel_a1 = (no_pu_TS5 - (v_a1[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4));
+	float cross_check_nonrel_a2 = (no_pu_TS6 - (v_a2[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4));
+	float cross_check_nonrel_a3 = (no_pu_TS7 - (v_a3[no_pu_ring] -> Eval(no_pu_TS4) * no_pu_TS4));
+
+	float delta_uncorrected        = (pu_50_TS45       - no_pu_TS45) / no_pu_TS45;
+	float delta_corrected          = (pu_50_TS45_prime - no_pu_TS45) / no_pu_TS45;
+	float delta_nonrel_uncorrected = (pu_50_TS45       - no_pu_TS45);
+	float delta_nonrel_corrected   = (pu_50_TS45_prime - no_pu_TS45);
+	float correction               = (pu_50_TS45_prime - pu_50_TS45);
 	
 	/*
 	std::cout << "no pu" << "\t" << "pu 50" << std::endl;
@@ -451,18 +507,34 @@ void analysisClass::loop(){
 	h_TS4_vs_cross_check_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a2);
 	h_TS4_vs_cross_check_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
 
+	h_TS4_vs_cross_check_nonrel_a0[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a0);
+	h_TS4_vs_cross_check_nonrel_a1[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a1);
+	h_TS4_vs_cross_check_nonrel_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a2);
+	h_TS4_vs_cross_check_nonrel_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a3);
+
 
 	h_TS4_vs_delta_uncorrected[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
 	h_TS4_vs_delta_corrected  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
+	h_TS4_vs_delta_nonrel_uncorrected[no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_uncorrected);
+	h_TS4_vs_delta_nonrel_corrected  [no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_corrected  );
 
 	if ( no_pu_TS4 > 50 ){
 	  h_TS4_vs_cross_check_over50_a0[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a0);
 	  h_TS4_vs_cross_check_over50_a1[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a1);
 	  h_TS4_vs_cross_check_over50_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a2);
 	  h_TS4_vs_cross_check_over50_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
+
+
+	  h_TS4_vs_cross_check_nonrel_over50_a0[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a0);
+	  h_TS4_vs_cross_check_nonrel_over50_a1[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a1);
+	  h_TS4_vs_cross_check_nonrel_over50_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a2);
+	  h_TS4_vs_cross_check_nonrel_over50_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a3);
+	  
 	  
 	  h_TS4_vs_delta_uncorrected_over50[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
 	  h_TS4_vs_delta_corrected_over50  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
+	  h_TS4_vs_delta_nonrel_uncorrected_over50[no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_uncorrected);
+	  h_TS4_vs_delta_nonrel_corrected_over50  [no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_corrected  );
 	}
 
 	if ( no_pu_TS4 > 500 ){
@@ -471,8 +543,16 @@ void analysisClass::loop(){
 	  h_TS4_vs_cross_check_over500_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a2);
 	  h_TS4_vs_cross_check_over500_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_a3);
 
+	  h_TS4_vs_cross_check_nonrel_over500_a0[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a0);
+	  h_TS4_vs_cross_check_nonrel_over500_a1[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a1);
+	  h_TS4_vs_cross_check_nonrel_over500_a2[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a2);
+	  h_TS4_vs_cross_check_nonrel_over500_a3[no_pu_ring] -> Fill (no_pu_TS4, cross_check_nonrel_a3);
+
+
 	  h_TS4_vs_delta_uncorrected_over500[no_pu_ring] -> Fill(no_pu_TS45, delta_uncorrected);
 	  h_TS4_vs_delta_corrected_over500  [no_pu_ring] -> Fill(no_pu_TS45, delta_corrected  );
+	  h_TS4_vs_delta_nonrel_uncorrected_over500[no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_uncorrected);
+	  h_TS4_vs_delta_nonrel_corrected_over500  [no_pu_ring] -> Fill(no_pu_TS45, delta_nonrel_corrected  );
 	}
 
 	if (isHB){
