@@ -177,6 +177,40 @@ def getOffset5 ( tmp_func ):
 # Define the fit function for a0
 #------------------------------------------------------------------------------------ 
 
+def fitf0_erf (x, par):
+    xx        = x[0];
+    erf_mean  = par[0];
+    erf_sigma = par[1];
+    eff_min   = par[2];
+    eff_max   = par[3];
+    sqrttwo   = r.TMath.Sqrt(2.0);
+
+    if xx < par[9]:
+        erf  = 0.0;
+        head = par[4] * r.TMath.Exp((xx-par[6])*par[5]);
+        tail = par[7] + (par[8] * xx);
+        erf += r.TMath.Erf((xx - erf_mean)/(erf_sigma * sqrttwo));
+        erf += 1.0;
+        erf *= (( eff_max - eff_min) / 2.0 );
+        erf += eff_min;
+        erf += tail;
+        erf += head;
+        return erf;
+    
+    else:
+        erf  = 0.0;
+        head = par[4] * r.TMath.Exp((par[9]-par[6])*par[5]);
+        tail = par[7] + (par[8] * par[9]);
+        erf += r.TMath.Erf((par[9] - erf_mean)/(erf_sigma * sqrttwo));
+        erf += 1.0;
+        erf *= (( eff_max - eff_min) / 2.0 );
+        erf += eff_min;
+        erf += tail;
+        erf += head;
+        
+        new_tail = ( xx - par[9] ) * par[10] + erf
+        return new_tail
+
 def fitf0_v3(x,par):
     xx    = x[0];
     expo1 = par[0] * r.TMath.Exp(par[1] + par[2] * xx);
@@ -195,7 +229,9 @@ def fitf0_v4(x,par):
     xx     = x[0];
     a      = par[0]
     b      = par[1]
-    retval = a * ( 1.0 - r.TMath.Exp(-1.0 * xx * b ) )
+    c      = par[2]
+    d      = par[3]
+    retval = a + (b * xx) + c * r.TMath.Exp(-1.0 * xx * d )
     return retval
 
 def fitf0(x,par):
@@ -283,8 +319,9 @@ def make_function_poly ( func_name, xmin, xmax, function, ring,  min_val ):
     
     func.SetParName(20, "a11_1");
     
-    func.SetParName(21, "a21_1");    
-    
+    func.SetParName(21, "a21_1"); 
+
+
     func.SetParameter(0, 15)
     func.SetParLimits(0, 15, 35)
 
@@ -292,19 +329,39 @@ def make_function_poly ( func_name, xmin, xmax, function, ring,  min_val ):
     func.SetParLimits(1, 35, 150)
 
     func.SetParameter(2, 150)
-    func.SetParLimits(2, 150, 700)
+    func.SetParLimits(2, 150, 300)
 
-    func.SetParameter(3, 700)
-    func.SetParLimits(3, 700, 900)
+    func.SetParameter(3, 300)
+    func.SetParLimits(3, 300, 500)
 
     func.SetParameter(4, 1100)
-    func.SetParLimits(4, 1100, 1500)
-    
+    func.SetParLimits(4, 500, 1500)
+       
     func.SetParameter(5, min_val)
     func.SetParLimits(5, min_val / 2.0, min_val * 2.0)
 
     return func
 
+def make_function_erf ( func_name, xmin, xmax ):
+
+    func = r.TF1 (func_name, fitf0_erf, xmin, xmax, 11)
+    func.SetLineColor(r.kRed)
+    
+    func.SetParName  (0, "Erf Mean   ");
+    func.SetParName  (1, "Erf Sigma  ");
+    func.SetParName  (2, "Eff Min    ");
+    func.SetParName  (3, "Eff Max    ");
+    func.SetParName  (4, "Exp  const ");
+    func.SetParName  (5, "Exp  slope ");
+    func.SetParName  (6, "Exp  offset");
+    func.SetParName  (7, "Tail a0    ");
+    func.SetParName  (8, "Tail a1    ");
+    func.SetParName  (9, "Break      ");
+    func.SetParName  (10,"Tail b1    ");
+    
+    return func
+
+    
 def make_function_expo (func_name, xmin, xmax ):
     
     func = r.TF1 (func_name, fitf0_v3, xmin, xmax ,7)
@@ -338,11 +395,8 @@ def make_function_expo (func_name, xmin, xmax ):
 
 def make_function_expo_alexandre (func_name, xmin, xmax ):
     
-    func = r.TF1 (func_name, fitf0_v4, xmin, xmax, 2)
+    func = r.TF1 (func_name, fitf0_v4, xmin, xmax, 4)
     func.SetLineColor(r.kRed);
-
-    func.SetParameter(1, 2.16435e-04)
-    func.SetParameter(0, 1.0)
 
     return func
     
@@ -358,26 +412,31 @@ def main():
     #------------------------------------------------------------------------------------
     
     min_function   = 0;
-    max_function   = 0;
+    max_function   = 3;
     min_ring       = 0;
-    max_ring       = 0;
+    max_ring       = 5;
     # fit_xmin       = 5.;
     # fit_xmax       = 3000.;
 
     fit_xmin       = 5.;
     fit_xmax       = 3000.;
 
-    fit_xmin_a0    = 100.;
+    fit_xmin_a0    = 0.;
     fit_xmax_a0    = 3000.;
     plot_xmin      = 5.;
     plot_xmax      = 3000.;
     draw_pieces    = False;
     tex_preamble   = False;
     do_print       = True;
+    pdf_file_name  = "fits.pdf"
     func_file_name = "fitResults.C"
+    corr_file_name = "make_EdmundsCorrections.C"
     file_name      = "HcalNoise_QCD1800_MC.root";
+    file_name      = "HcalNoise_QCD80to120_MC.root";
+    file_name      = "HcalNoise_QCD80to120_and_QCD1800_MC.root";
     data_card_path = "data/data_cards/data_card_2014-04-17.txt";
 
+    corr_file = open (corr_file_name,"w")
     func_file = open (func_file_name,"w")
     func_file.write("#include \"fitResults.h\"\n\n")
 
@@ -400,19 +459,19 @@ def main():
 
     d_ring_funcname = {
         0: "HB",
-        1: "HE1720",
-        2: "HE2123",
-        3: "HE2425",
-        4: "HE2627",
-        5: "HE2828"
+        1: "1720",
+        2: "2123",
+        3: "2425",
+        4: "2627",
+        5: "28"
         }
     
 
     d_function_name = {
-        0: "TS3/TS4",
-        1: "TS5/TS4",
-        2: "TS6/TS4",
-        3: "TS7/TS4"
+        0: "TS3/TS4, function a_1",
+        1: "TS5/TS4, function a1",
+        2: "TS6/TS4, function a2",
+        3: "TS7/TS4, function a3"
         }
 
     #------------------------------------------------------------------------------------ 
@@ -436,6 +495,7 @@ def main():
     #------------------------------------------------------------------------------------ 
     
     canv = r.TCanvas();
+    canv.Print(pdf_file_name + "[")
     canv.SetLogx();
     canv.SetLogy();
     r.gStyle.SetOptFit(0);
@@ -476,11 +536,12 @@ def main():
             # http:#root.cern.ch/root/html/TProfile.html#TProfile:BuildOptions
             #------------------------------------------------------------------------------------ 
             
-            prof = getProfile ( hist, 5. )
+            if function == 0:
+                prof = getProfile ( hist, 1000. )
+            else:
+                prof = getProfile ( hist, 100. )
             out_file.cd()
             prof.Write()
-
-            continue
 
             #------------------------------------------------------------------------------------ 
             # Get some values from the TProfile
@@ -496,7 +557,9 @@ def main():
             if function > 0:
                 func = make_function_poly (func_name, fit_xmin, fit_xmax, function, ring, min_val)
             else:
-                func = make_function_expo_alexandre (func_name, fit_xmin_a0, fit_xmax_a0)
+                # func = make_function_expo_alexandre (func_name, fit_xmin_a0, fit_xmax_a0)
+                func_v1 = make_function_erf (func_name + "v1", fit_xmin, fit_xmax)
+                func_v2 = make_function_erf (func_name , fit_xmin, fit_xmax)
 
             #------------------------------------------------------------------------------------ 
             # Style the TProfile
@@ -511,6 +574,7 @@ def main():
             
             prof.Draw("P");
             prof.GetXaxis().SetRangeUser(plot_xmin, plot_xmax);
+            prof.GetYaxis().SetTitleOffset(1.25)
             prof.GetXaxis().SetTitle("TS4 [fC], for " + d_ring_name[ring]);
             prof.GetYaxis().SetTitle(d_function_name[function]);
             
@@ -528,6 +592,7 @@ def main():
                 last_sub_function_par_errors = []
 
                 last_region_xmax = 0.0
+                last_region_xmax_2 = 0.0
                 last_region_fixed = 0.0
                 
                 for region in range(0,6):
@@ -544,11 +609,11 @@ def main():
                     if   region == 0:
                         region_xmin = fit_xmin
                         region_xmax = 30.
-                    elif region < 5 :
-                        region_xmin = max(fit_xmin,min(last_region_fixed, last_region_xmax) - 10.)
+                    elif region < 4 :
+                        region_xmin = max(fit_xmin,min(last_region_fixed, last_region_xmax_2) - 10.)
                         region_xmax = min(fit_xmax,max(next_region_xmax, this_region_fixed))
                     else:
-                        region_xmin = max(fit_xmin,min(last_region_fixed, last_region_xmax) - 10.)
+                        region_xmin = max(fit_xmin,min(last_region_fixed, last_region_xmax_2) - 10.)
                         region_xmax = fit_xmax
 
                     sub_function = make_function_poly (sub_function_name, region_xmin, region_xmax, function, ring, min_val)
@@ -615,7 +680,8 @@ def main():
                     tmp_save_name = lin_save_name.replace(".png", "_sub" + str(region) + ".png")
                     canv.SaveAs(tmp_save_name)
 
-                    last_region_xmax = region_xmax
+                    last_region_xmax_2 = last_region_xmax
+                    last_region_xmax   = region_xmax
 
                 last_function = sub_functions[-1]
                 last_function.SetRange(plot_xmin, plot_xmax)
@@ -645,6 +711,15 @@ def main():
                         if i != 4: line +=", "
                     line += "};"
                     func_file.write(line + "\n")
+
+                    corr_file.write( "static PiecewiseScalingPolynomial a"+str(function)+"_"+d_ring_funcname[ring]+"(){\n")
+                    line = "  const double pol41[5] = {"
+                    for i in range(0,5):
+                        line += str(func1.GetParameter(i))
+                        if i != 4: line +=", "
+                    line += "};"
+                    corr_file.write(line + "\n")
+                
                 
                 func2 = r.TF1("func2", "pol4", last_function.GetParameter(0), last_function.GetParameter(1));
                 func2.SetParameter(0, getOffset1(last_function));
@@ -664,6 +739,13 @@ def main():
                         if i != 4: line += ", "
                     line += "};"
                     func_file.write(line + "\n")
+
+                    line = "  const double pol42[5] = {"
+                    for i in range(0,5):
+                        line += str(func2.GetParameter(i))
+                        if i != 4: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
                 
                 func3 = r.TF1("func3", "pol3", last_function.GetParameter(1), last_function.GetParameter(2));
                 func3.SetParameter(0, getOffset2(last_function));
@@ -681,7 +763,14 @@ def main():
                         if i != 3: line += ", "
                     line += "};"
                     func_file.write(line + "\n")
-                
+                    
+                    line = "  const double pol31[4] = {"
+                    for i in range(0,4):
+                        line += str(func3.GetParameter(i))
+                        if i != 3: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
+                    
                 func4 = r.TF1("func4", "pol3", last_function.GetParameter(2), last_function.GetParameter(3));
                 func4.SetParameter(0, getOffset3(last_function));
                 func4.SetParameter(1, last_function.GetParameter(17));
@@ -698,6 +787,13 @@ def main():
                         if i != 3: line += ", "
                     line += "};"
                     func_file.write(line + "\n")
+                    
+                    line = "  const double pol32[4] = {"
+                    for i in range(0,4):
+                        line += str(func4.GetParameter(i))
+                        if i != 3: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
                 
                 func5 = r.TF1("func5", "pol1", last_function.GetParameter(3), last_function.GetParameter(4));
                 func5.SetParameter(0, getOffset4(last_function));
@@ -711,6 +807,13 @@ def main():
                         if i != 1: line += ", "
                     line += "};"
                     func_file.write(line + "\n")
+
+                    line = "  const double pol11[2] = {"
+                    for i in range(0,2):
+                        line += str(func5.GetParameter(i))
+                        if i != 1: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
                 
                 func6 = r.TF1("func6", "pol1", last_function.GetParameter(4), fit_xmax);
                 func6.SetParameter(0, getOffset5(last_function));
@@ -733,6 +836,22 @@ def main():
                     line += "};"
                     func_file.write(line + "\n")
                     
+                    line = "  const double pol12[2] = {"
+                    for i in range(0,2):
+                        line += str(func6.GetParameter(i))
+                        if i != 1: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
+                    
+                    line = "  const double limits[5] = {"
+                    for i in range(0,5):
+                        line += str(last_function.GetParameter(i))
+                        if i != 4: line += ", "
+                    line += "};"
+                    corr_file.write(line + "\n")
+                    corr_file.write("  make_poly;\n")
+                    corr_file.write("}\n\n")
+                    
                     func_file.write( "  if      (                    xx < limits[0] ) return ( ( pol41[0] * 1 ) + ( pol41[1] * xx ) + ( pol41[2] * xx * xx ) + ( pol41[3] * xx * xx * xx ) + ( pol41[4] * xx * xx * xx * xx ) );\n")
                     func_file.write( "  else if ( limits[0] <= xx && xx < limits[1] ) return ( ( pol42[0] * 1 ) + ( pol42[1] * xx ) + ( pol42[2] * xx * xx ) + ( pol42[3] * xx * xx * xx ) + ( pol42[4] * xx * xx * xx * xx ) );\n")
                     func_file.write( "  else if ( limits[1] <= xx && xx < limits[2] ) return ( ( pol31[0] * 1 ) + ( pol31[1] * xx ) + ( pol31[2] * xx * xx ) + ( pol31[3] * xx * xx * xx ) );\n")
@@ -754,6 +873,7 @@ def main():
                 last_function.Draw("SAME")
 
                 canv.SaveAs(log_save_name);
+                canv.Print(pdf_file_name)
 
                 canv.Clear()
                 canv.SetLogy(0)
@@ -771,20 +891,145 @@ def main():
             
             else:
                 
-                prof.Fit(func_name,"R")
+                func_v1.SetRange(5., 50.)
+                func_v1.SetParLimits(0, -10., -1.0);
+                func_v1.SetParameter(0, -8.0);
+                func_v1.SetParLimits(1, 6., 12.);
+                func_v1.SetParameter(1, 8.);
+                func_v1.SetParLimits(2, -0.2, -0.01);
+                func_v1.SetParameter(2, -0.02);
+                func_v1.SetParLimits(3, 0.01, 0.2);
+                func_v1.SetParameter(3, 0.02);
+                func_v1.SetParameter(4, 5.0);
+                func_v1.SetParLimits(4, 4.0, 10.0);
+                func_v1.SetParameter(5, -0.15);
+                func_v1.SetParLimits(5, -1.0, 0.0);
+                func_v1.SetParameter(6, -5.0);
+                func_v1.SetParLimits(6, -10.0, -0.1);
+                func_v1.SetParLimits(9, 50, 200)
+                func_v1.SetParameter(9, 100)
+
+                prof.Fit(func_name + "v1" ,"MR")
+
+                print "chi^2 =", func_v1.GetChisquare()
+                print "ndof  =", func_v1.GetNDF()
+                print "ratio =", func_v1.GetChisquare() / func_v1.GetNDF()
                 
-                print "chi^2 =", func.GetChisquare()
-                print "ndof  =", func.GetNDF()
-                print "ratio =", func.GetChisquare() / func.GetNDF()
                 
+                parameters_to_set = [0, 1, 2, 3, 4, 5, 6]
+    
+                for parameter in range(0, 11):
+                    old_par_mean  = func_v1.GetParameter(parameter)
+                    old_par_error = func_v1.GetParError (parameter)                    
+                    func_v2.SetParameter(parameter, old_par_mean)
+                
+                
+                prof.Fit(func_name ,"MR")
+
+                print "chi^2 =", func_v2.GetChisquare()
+                print "ndof  =", func_v2.GetNDF()
+                print "ratio =", func_v2.GetChisquare() / func_v2.GetNDF()
+                
+
+                func = func_v2
+                
+                tmp_erf_mean  = func_v2.GetParameter(0);
+                tmp_erf_sigma = func_v2.GetParameter(1);
+                tmp_eff_min   = func_v2.GetParameter(2);
+                tmp_eff_max   = func_v2.GetParameter(3);
+                
+                tmp_erf  = 0.0;
+                tmp_sqrttwo = r.TMath.Sqrt(2.0);
+                tmp_head = func_v2.GetParameter(4) * r.TMath.Exp((func_v2.GetParameter(9)-func_v2.GetParameter(6))*func_v2.GetParameter(5));
+                tmp_tail = func_v2.GetParameter(7) + (func_v2.GetParameter(8) * func_v2.GetParameter(9));
+                tmp_erf += r.TMath.Erf((func_v2.GetParameter(9) - tmp_erf_mean)/(tmp_erf_sigma * tmp_sqrttwo));
+                tmp_erf += 1.0;
+                tmp_erf *= (( tmp_eff_max - tmp_eff_min) / 2.0 );
+                tmp_erf += tmp_eff_min;
+                tmp_erf += tmp_tail;
+                tmp_erf += tmp_head;
+                
+                func3_v2 = r.TF1 ("func2_v2", "pol1", 5., 3000.)
+                func3_v2.SetLineColor(r.kGreen)
+                func3_v2.SetLineStyle(r.kDashed)
+                func3_v2.SetParameter(0, tmp_erf - func_v2.GetParameter(10) * func_v2.GetParameter(9))
+                func3_v2.SetParameter(1, func_v2.GetParameter(10))
+                
+                if do_print:
+                    func_file.write( "Double_t fitResults::a"+str(function)+"_"+d_ring_funcname[ring]+" (Double_t * x, Double_t * par){\n")
+                    func_file.write("  float xx = x[0];\n")
+                
+                    line = "  float erf[4] = {"
+                    for i in range(0,4):
+                        line += str(func_v2.GetParameter(i))
+                        if i != 3: line +=  ", "
+                    line += "};"
+                    func_file.write(line+"\n")
+
+                    line = "  float exp[3] = {"
+                    for i in range(0,3):
+                        line += str(func_v2.GetParameter(i+4))
+                        if i != 2: line += ", "
+                    line += "};"
+                    func_file.write(line+"\n")
+                
+                    line = "  float pol11[2] = {"
+                    for i in range(0,2):
+                        line += str(func_v2.GetParameter(i+7))
+                        if i != 1: line += ", "
+                    line += "};"
+                    func_file.write(line+"\n")
+
+                    line = "  float pol12[2] = {"
+                    for i in range(0,2):
+                        line += str(func3_v2.GetParameter(i))
+                        if i != 1: line += ", "
+                    line += "};"
+                    func_file.write(line+"\n")
+    
+                    line = "  float limits[1] = {"
+                    line += str(func_v2.GetParameter(9))
+                    line += "};"
+                    func_file.write(line+"\n")
+                    
+                    func_file.write("  if ( xx < limits[0] ){\n")
+                    func_file.write("    Double_t tmp_exp = exp[0] * TMath::Exp((xx-exp[2])*exp[1]);\n")
+                    func_file.write("    Double_t tmp_pol = pol11[0] + pol11[1] * xx;\n")
+                    func_file.write("    Double_t tmp_erf = 0.0;\n")
+                    func_file.write("    Double_t sqrttwo = TMath::Sqrt(2.0);\n")
+                    func_file.write("    tmp_erf += TMath::Erf((xx - erf[0])/(erf[1] * sqrttwo));\n")
+                    func_file.write("    tmp_erf += 1.0;\n")
+                    func_file.write("    tmp_erf *= (( erf[3] - erf[2] ) / 2.0 );\n")
+                    func_file.write("    tmp_erf += erf[2];\n")
+                    func_file.write("    return tmp_erf + tmp_pol + tmp_exp;\n")
+                    func_file.write("  }\n")
+                    func_file.write("  else {\n")
+                    func_file.write("    Double_t tmp_pol = pol12[0] + pol12[1] * xx;\n")
+                    func_file.write("    return tmp_pol;\n")
+                    func_file.write("  }\n")
+                    func_file.write("}\n")
+
+                    corr_file.write("static ScalingExponential a_1_"+d_ring_funcname[ring]+"() {\n")
+                    
+                    line = "  const double par[2] = {"
+                    for i in range(0,2):
+                        line += str(func3_v2.GetParameter(i))
+                        if i != 1: line += ", "
+                    line += "};"
+                    corr_file.write(line+"\n")
+                    corr_file.write("  return ScalingExponential(par[0], par[1], true);\n")
+                    corr_file.write("}\n\n")
+
+                    
                 canv.Clear()
-                canv.SetLogy(1)
                 canv.SetLogx(1)
                 prof.Draw()
                 func.SetRange(plot_xmin, plot_xmax)
                 func.Draw("SAME")
+                func3_v2.Draw("SAME")
 
                 canv.SaveAs(log_save_name);
+                canv.Print(pdf_file_name)
 
                 canv.Clear()
                 canv.SetLogy(0)
@@ -792,32 +1037,10 @@ def main():
                 prof.Draw()
                 func.SetRange(plot_xmin, plot_xmax)
                 func.Draw("SAME")
+                func3_v2.Draw("SAME")
             
                 canv.SaveAs(lin_save_name);
-            
-                if do_print:
-                    func_file.write( "Double_t fitResults::a0_" + d_ring_funcname[ring] + " (Double_t * x, Double_t * par){\n")
-                    func_file.write( "  Double_t xx = x[0];\n")
-                    line = "  Double_t vars[7] = {"
-                    for i in range(0,7):
-                        line += str(func.GetParameter(i))
-                        if i != 6: line += ", "
-                    line += "};"
-                    func_file.write(line + "\n")
-                    func_file.write( "  if (xx < vars[6]){\n")
-                    func_file.write( "    Double_t expo1 = vars[0] * TMath::Exp(vars[1] + vars[2] * xx);\n")
-                    func_file.write( "    Double_t pol1  = vars[3] + vars[4] * xx;\n")
-                    func_file.write( "    return expo1 + pol1;\n")
-                    func_file.write( "  }\n")
-                    func_file.write( "  else {\n")
-                    func_file.write( "    Double_t offset_expo = vars[0] * TMath::Exp(vars[1] + vars[2] * vars[6]);\n")
-                    func_file.write( "    Double_t offset_pol1 = vars[3] + vars[4] * vars[6];\n")
-                    func_file.write( "    Double_t offset = offset_expo + offset_pol1;\n")
-                    func_file.write( "    Double_t retval = offset + vars[5] * ( xx - vars[6] );\n")
-                    func_file.write( "    return retval;\n")
-                    func_file.write( "  }\n")
-                    func_file.write( "}\n\n")
-
+    canv.Print(pdf_file_name + "]")
 
 if __name__ == "__main__":
     r.gErrorIgnoreLevel = r.kWarning
