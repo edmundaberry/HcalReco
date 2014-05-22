@@ -316,14 +316,14 @@ void analysisClass::loop(){
     sprintf(hist_name, "TS4_vs_delta_corrected_over500_ring%d"  , iring); h_TS4_vs_delta_corrected_over500   .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -1, 1));
 
 		        					     
-    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_ring%d"        , iring); h_TS4_vs_delta_nonrel_uncorrected         .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -100, 100));
-    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_ring%d"          , iring); h_TS4_vs_delta_nonrel_corrected           .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_ring%d"        , iring); h_TS4_vs_delta_nonrel_uncorrected         .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 2000, -1000, 1000));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_ring%d"          , iring); h_TS4_vs_delta_nonrel_corrected           .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 2000, -1000, 1000));
 
-    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over50_ring%d" , iring); h_TS4_vs_delta_nonrel_uncorrected_over50  .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 200, -100, 100));
-    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over50_ring%d"   , iring); h_TS4_vs_delta_nonrel_corrected_over50    .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over50_ring%d" , iring); h_TS4_vs_delta_nonrel_uncorrected_over50  .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 2000, -1000, 1000));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over50_ring%d"   , iring); h_TS4_vs_delta_nonrel_corrected_over50    .push_back ( makeTH2F ( hist_name, 200, 50 , 5000, 2000, -1000, 1000));
 
-    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over500_ring%d", iring); h_TS4_vs_delta_nonrel_uncorrected_over500 .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -100, 100));
-    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over500_ring%d"  , iring); h_TS4_vs_delta_nonrel_corrected_over500   .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -100, 100));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_uncorrected_over500_ring%d", iring); h_TS4_vs_delta_nonrel_uncorrected_over500 .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 2000, -1000, 1000));
+    sprintf(hist_name, "TS4_vs_delta_nonrel_corrected_over500_ring%d"  , iring); h_TS4_vs_delta_nonrel_corrected_over500   .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 2000, -1000, 1000));
   }
 
   //--------------------------------------------------------------------------------
