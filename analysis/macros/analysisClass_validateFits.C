@@ -338,25 +338,25 @@ void analysisClass::loop(){
     sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a2_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a2            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
     sprintf(hist_name, "TS4_vs_crosscheck_nonrel_a3_ring%d"            , iring); h_TS4_vs_cross_check_nonrel_a3            .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -200, 200));
 							        					     
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a0_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a0     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a1_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a1     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a2_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a2     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a3_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a3     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -10  , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a0_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a0     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a1_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a1     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a2_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a2     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over50_a3_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_over50_a3     .push_back ( makeTH2F ( hist_name, 200, 50, 5000, 200, -200, 200 ));
 							          					     
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a0_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a0     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a1_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a1     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a2_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a2     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -10  , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a3_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a3     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -10  , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a0_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a0     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a1_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a1     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a2_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a2     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under50_a3_ring%d"     , iring); h_TS4_vs_cross_check_nonrel_under50_a3     .push_back ( makeTH2F ( hist_name, 200, 0, 50, 200, -200, 200 ));
 							        					     
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a0_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a0    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a1_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a1    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a2_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a2    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a3_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a3    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -10 , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a0_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a0    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a1_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a1    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a2_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a2    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_over500_a3_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_over500_a3    .push_back ( makeTH2F ( hist_name, 200, 500, 5000, 200, -200, 200 ));
     							        					     
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a0_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a0    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a1_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a1    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a2_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a2    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -10 , 10 ));
-    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a3_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a3    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -10 , 10 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a0_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a0    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a1_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a1    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a2_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a2    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -200, 200 ));
+    sprintf(hist_name, "TS4_vs_crosscheck_nonrel_under500_a3_ring%d"    , iring); h_TS4_vs_cross_check_nonrel_under500_a3    .push_back ( makeTH2F ( hist_name, 200, 0, 500, 200, -200, 200 ));
     							        					     
     sprintf(hist_name, "TS4_vs_delta_uncorrected_ring%d"        , iring); h_TS4_vs_delta_uncorrected         .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -10, 10));
     sprintf(hist_name, "TS4_vs_delta_corrected_ring%d"          , iring); h_TS4_vs_delta_corrected           .push_back ( makeTH2F ( hist_name, 200, 0  , 5000, 200, -10, 10));
